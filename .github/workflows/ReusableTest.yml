@@ -40,7 +40,7 @@ jobs:
                   version: ${{ inputs.version }}
                   arch: ${{ inputs.arch }}
             - name: Use Julia cache
-              uses: julia-actions/cache@v2
+              uses: julia-actions/cache@v3
             - name: "Add LorentzVectorBase.jl"
               run: |
                   julia --project=. -e 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/JuliaHEP/LorentzVectorBase.jl"))'
