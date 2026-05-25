@@ -5,22 +5,20 @@ struct FourVector{T} <: FieldVector{4, T}
     E::T
 end
 
-function FourVector(
-    px::T,
-    py::T,
-    pz::T;
-    E::Union{Nothing, T} = nothing,
-    M::Union{Nothing, T} = nothing,
-) where {T}
+function FourVector(px, py, pz; E = nothing, M = nothing)
     if (E === nothing) == (M === nothing)
         throw(ArgumentError("Must specify exactly one of `E` or `M`."))
     end
 
     if E !== nothing
-        return FourVector{T}(px, py, pz, E)
+        px, py, pz, E = promote(px, py, pz, E)
+        return FourVector{typeof(E)}(px, py, pz, E)
     else
+        px, py, pz, M = promote(px, py, pz, M)
         E_calculated = sqrt(px^2 + py^2 + pz^2 + M^2)
-        return FourVector{T}(px, py, pz, E_calculated)
+        TE = typeof(E_calculated)
+        # sqrt can widen integers to floats while promoted (px,py,pz,M) stay narrower types
+        return FourVector{TE}(convert(TE, px), convert(TE, py), convert(TE, pz), E_calculated)
     end
 end
 
