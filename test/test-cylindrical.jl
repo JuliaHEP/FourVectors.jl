@@ -1,3 +1,4 @@
+using FourVectors
 using Test
 
 @testset "FourVectorCyl construction and LorentzVectorBase interface" begin
@@ -33,10 +34,8 @@ end
     @test (v3 + v4).mass == 92.55651f0
     @test fast_mass(v3, v4) ≈ 92.55651f0
 
-    if isdefined(Main, :deltar)
-        @test isapprox(deltar(v3, v4), 3.265188f0, atol = 1e-6)
-        @test isapprox(deltaphi(v3, v4), 3.0791016f0, atol = 1e-6)
-    end
+    @test isapprox(deltar(v3, v4), 3.265188f0, atol = 1e-6)
+    @test isapprox(deltaphi(v3, v4), 3.0791016f0, atol = 1e-6)
 
     v5 = v3 * 5
     @test v5.pt == 5 * v3.pt
@@ -74,15 +73,11 @@ end
 end
 
 @testset "Separation on Cartesian FourVector" begin
-    if !isdefined(Main, :deltar)
-        @info "Skipping separation tests until LorentzVectorBase exports deltar"
-    else
-        vcart1 = FourVector(-2.3, 4.5, 0.23; E = 10.0)
-        vcart2 = FourVector(2.7, -4.1, -0.21; E = 10.0)
-        @test deltaeta(vcart1, vcart2) ≈ 0.08825941862546584 atol = 1e-9
-        @test deltaphi(vcart1, vcart2) ≈ 3.0317366429628736 atol = 1e-9
-        @test deltar(vcart1, vcart2) ≈ sqrt(deltaeta(vcart1, vcart2)^2 + deltaphi(vcart1, vcart2)^2)
-    end
+    vcart1 = FourVector(-2.3, 4.5, 0.23; E = 10.0)
+    vcart2 = FourVector(2.7, -4.1, -0.21; E = 10.0)
+    @test deltaeta(vcart1, vcart2) ≈ 0.08825941862546584 atol = 1e-9
+    @test deltaphi(vcart1, vcart2) ≈ 3.0317366429628736 atol = 1e-9
+    @test deltar(vcart1, vcart2) ≈ sqrt(deltaeta(vcart1, vcart2)^2 + deltaphi(vcart1, vcart2)^2)
 end
 
 @testset "FourVectorCyl broadcasting" begin

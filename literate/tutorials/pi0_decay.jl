@@ -4,7 +4,6 @@
 # Photon energies match half the π⁰ mass in the decay frame (`m_pi0/2`), boosted with **`Bz`** into the lab, rotated with **`Ry`** and **`Rz`** so that photon 1 aligns with the parent kinematics (**`spherical_coordinates`**), and complemented by subtraction for photon 2.
 
 using FourVectors
-using LorentzVectorBase
 using Test
 
 # ## Mass units and laboratory pion

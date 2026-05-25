@@ -1,6 +1,4 @@
 using FourVectors
-include("lorentzvectorbase_api.jl")
-__import_lorentzvectorbase!()
 using Test
 
 for (root, dirs, files) in walkdir(@__DIR__)
