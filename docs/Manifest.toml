@@ -72,7 +72,7 @@ version = "1.11.0"
 deps = ["LinearAlgebra", "LorentzVectorBase", "StaticArrays"]
 path = "/Users/mikhailmikhasenko/Documents/JuliaDev.CAT/FourVectors.jl"
 uuid = "b122eb78-8380-428a-b8c8-584a022ae8b6"
-version = "0.3.4"
+version = "0.4.0"
 
 [[deps.Git]]
 deps = ["Git_LFS_jll", "Git_jll", "JLLWrappers", "OpenSSH_jll"]
