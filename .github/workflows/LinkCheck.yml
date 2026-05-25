@@ -1,0 +1,25 @@
+name: Link Check
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+    lychee:
+        name: lychee
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+            - name: Check links
+              uses: lycheeverse/lychee-action@v2
+              with:
+                  fail: true
+                  args: --no-progress './**/*.md' './**/*.html'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
