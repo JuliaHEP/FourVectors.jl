@@ -4,7 +4,6 @@ using Test
 p = FourVector(1.0, 2.0, 3.0; E = 4.0)
 p′ = FourVector(1.0, 2.0, 3.0; M = √2)
 
-
 @testset "Construction" begin
     @test p isa FourVector
     @test p ≈ p′
