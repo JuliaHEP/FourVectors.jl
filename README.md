@@ -100,7 +100,7 @@ LorentzVectorBase also provides shorter aliases (`pt`, `phi`, `eta`, and others)
 Those are available as `LorentzVectorBase.name(p)` unless you import them yourself.
 See the LorentzVectorBase documentation for the full interface.
 
-This package additionally exports `spherical_coordinates`, which returns `(cosθ, ϕ)` for the spatial direction.
+This package additionally exports `spherical_coordinates`, which returns a named tuple `(cosθ, ϕ)` for the spatial direction.
 
 ### Lorentz transformations
 
