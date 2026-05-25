@@ -5,21 +5,20 @@ struct FourVector{T} <: FieldVector{4, T}
     E::T
 end
 
-function FourVector(
-    px::T,
-    py::T,
-    pz::T;
-    E::Union{Nothing, T} = nothing,
-    M::Union{Nothing, T} = nothing,
-) where {T}
-    @assert (E !== nothing) != (M !== nothing) "Must specify exactly one of E or M."
+function FourVector(px, py, pz; E = nothing, M = nothing)
+    if (E === nothing) == (M === nothing)
+        throw(ArgumentError("Must specify exactly one of `E` or `M`."))
+    end
 
     if E !== nothing
-        # Use the provided energy
-        return FourVector{T}(px, py, pz, E)
+        px, py, pz, E = promote(px, py, pz, E)
+        return FourVector{typeof(E)}(px, py, pz, E)
     else
+        px, py, pz, M = promote(px, py, pz, M)
         E_calculated = sqrt(px^2 + py^2 + pz^2 + M^2)
-        return FourVector{T}(px, py, pz, E_calculated)
+        TE = typeof(E_calculated)
+        # sqrt can widen integers to floats while promoted (px,py,pz,M) stay narrower types
+        return FourVector{TE}(convert(TE, px), convert(TE, py), convert(TE, pz), E_calculated)
     end
 end
 
@@ -34,22 +33,9 @@ LorentzVectorBase.E(mom::FourVector) = getfield(mom, :E)
 
 LinearAlgebra.dot(p1::FourVector, p2::FourVector) = p1.E * p2.E - dot(p1.P, p2.P)
 
+"""
+    spherical_coordinates(p)
+
+Polar direction of spatial part of `p` as `(cosθ = cos_theta(p), ϕ = azimuthal_angle(p))`.
+"""
 spherical_coordinates(p) = (cosθ = cos_theta(p), ϕ = azimuthal_angle(p))
-
-
-# Particle(; E, p) = FourVector(p...; t = E)
-# SParticle(; E, p) = FourVector(SVector(p..., E))
-# function Particle(px, py, pz; E = nothing, msq = nothing)
-#     if (msq === nothing) == (E === nothing)
-#         throw(ArgumentError("Must provide exactly one of either `msq` or `E`."))
-#     end
-#     E !== nothing && return FourVector(px, py, pz; t = E)
-#     return FourVector(px, py, pz; t = sqrt(hypot(px, py, pz)^2 + msq))
-# end
-# function SParticle(px, py, pz; E = nothing, msq = nothing)
-#     if (msq === nothing) == (E === nothing)
-#         throw(ArgumentError("Must provide exactly one of either `msq` or `E`."))
-#     end
-#     E !== nothing && return FourVector(SVector(px, py, pz, E))
-#     return FourVector(SVector(px, py, pz, sqrt(hypot(px, py, pz)^2 + msq)))
-# end

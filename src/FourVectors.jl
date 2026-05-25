@@ -1,6 +1,5 @@
 module FourVectors
 
-using Parameters
 using StaticArrays
 using LinearAlgebra
 using LorentzVectorBase

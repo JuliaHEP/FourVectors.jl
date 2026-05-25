@@ -1,7 +1,7 @@
 """
-    Rz(p::FourVector{T}, θ::T) where {T}
+    Rx(p::FourVector{T}, α::T) where {T}
 
-Applies active rotation by an angle α about x-axis to `p`.
+Applies an active rotation by angle `α` about the x-axis to `p`.
 """
 function Rx(p::FourVector{T}, α::T) where {T}
     sinα, cosα = sincos(α)
@@ -11,9 +11,9 @@ function Rx(p::FourVector{T}, α::T) where {T}
 end
 
 """
-    Rz(p::FourVector{T}, θ::T) where {T}
+    Ry(p::FourVector{T}, θ::T) where {T}
 
-Applies active rotation by an angle θ about y-axis to `p`.
+Applies an active rotation by angle `θ` about the y-axis to `p`.
 """
 function Ry(p::FourVector{T}, θ::T) where {T}
     sinθ, cosθ = sincos(θ)
@@ -25,7 +25,7 @@ end
 """
     Rz(p::FourVector{T}, ϕ::T) where {T}
 
-Applies active rotation by an angle ϕ about z-axis to `p`.
+Applies an active rotation by angle `ϕ` about the z-axis to `p`.
 """
 function Rz(p::FourVector{T}, ϕ::T) where {T}
     sinϕ, cosϕ = sincos(ϕ)
@@ -37,8 +37,8 @@ end
 """
     Bz(p::FourVector{T}, γ::T) where {T}
 
-Applies active boost along z-axis to `p` with boost factor `γ`.
-Negative value of `γ` corresponds to boost in opposite direction.
+Applies an active boost along the z-axis with Lorentz factor `γ`.
+A negative `γ` reverses the boost direction (same `|γ|`, opposite sign of longitudinal velocity).
 """
 function Bz(p::FourVector{T}, γ::T) where {T}
     _γ = abs(γ)
@@ -58,19 +58,29 @@ Bz(γ) = p -> Bz(p, γ)
 """
     rotate_to_plane(p, which_z, which_xplus)
 
-Rotates a four-momentum `p` into a reference plane defined by the `z`-axis (`which_z`) and an additional reference direction (`which_xplus`).
+Rotates a four-momentum `p` into a reference frame where the **z**-axis follows `which_z`
+and where the spatial direction `which_xplus` fixes azimuth (`φ` > 0 half-plane).
 
-This function performs a sequence of rotations:
-1. Aligns `p` with the z-axis as defined by `which_z`.
-2. Rotates around the z-axis to align with the x-axis direction specified by `which_xplus`.
+Sequence:
+
+1. Rotate so `which_z` aligns with the lab **+z** (`Ry`, `Rz`).
+2. Rotate about **z** so `which_xplus` sits in the *x–z* plane at non-negative **x**.
 
 # Example
+
 ```julia
-julia> p = FourVector(0.5, 0.5, 0.5; M=1.0);
-	which_z = FourVector(0.0, 0.0, 1.0; M=2.0);
-	which_xplus = FourVector(1.0, 1.0, 0.0; M=0.0);
+julia> p = FourVector(0.5, 0.5, 0.5; M = 1.0);
+
+julia> which_z = FourVector(0.0, 0.0, 1.0; M = 2.0);
+
+julia> which_xplus = FourVector(1.0, 1.0, 0.0; M = 0.0);
+
 julia> rotate_to_plane(p, which_z, which_xplus)
-[0.7071067811865475, 5.551115123125783e-17, 0.5, 1.3228756555322954]
+4-element FourVector{Float64} with indices SOneTo(4):
+ 0.7071067811865475
+ 5.551115123125783e-17
+ 0.5
+ 1.3228756555322954
 ```
 """
 function rotate_to_plane(p, which_z, which_xplus)
@@ -83,18 +93,20 @@ end
 """
     transform_to_cmf(p, which_cmf)
 
-Transforms a four-momentum `p` to the center-of-momentum frame (CMF) of the reference frame specified by `which_cmf`.
-
-This function applies a series of transformations:
-1. Rotates `p` to align with the z-axis.
-2. Boosts `p` along the z-axis to reach the CMF.
+Transforms `p` into the center-of-momentum frame of `which_cmf`: rotate so its
+spatial direction aligns with **+z**, then boost along **z** using the Lorentz factor of `which_cmf`.
 
 # Example
-```julia
-julia> p = FourVector(0.5, 0.5, 0.5; M=1.0);
-julia> transform_to_cmf(p, FourVector(1.0, 0.0, 0.0; E=2.0))
 
-[-0.49999999999999994, 0.5, -0.18641234663634787, 1.238850097057134]
+```julia
+julia> p = FourVector(0.5, 0.5, 0.5; M = 1.0);
+
+julia> transform_to_cmf(p, FourVector(1.0, 0.0, 0.0; E = 2.0))
+4-element FourVector{Float64} with indices SOneTo(4):
+ -0.49999999999999994
+  0.5
+ -0.18641234663634787
+  1.238850097057134
 ```
 """
 function transform_to_cmf(p, which_cmf)
