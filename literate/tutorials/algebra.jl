@@ -10,7 +10,7 @@ using FourVectors
 using LinearAlgebra
 using Test
 
-p = FourVector(10.0, 0.0, 0.0; E = 11.0)   # nearly collinear with +z
+p = FourVector(10.0, 0.0, 0.0; E = 11.0)   # nearly collinear with +x
 q = FourVector(-3.0, 1.0, 2.0; M = 2.0)    # on-shell particle of mass 2
 
 # ## Addition and subtraction
