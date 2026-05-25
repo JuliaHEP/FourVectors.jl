@@ -1,8 +1,8 @@
 # FourVectors
 
-[![Test workflow status](https://github.com/mmikhasenko/FourVectors.jl/actions/workflows/Test.yml/badge.svg?branch=main)](https://github.com/mmikhasenko/FourVectors.jl/actions/workflows/Test.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/mmikhasenko/FourVectors.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mmikhasenko/FourVectors.jl)
-[![Docs](https://img.shields.io/badge/docs-blue.svg)](https://mmikhasenko.github.io/FourVectors.jl/dev/)
+[![Test workflow status](https://github.com/JuliaHEP/FourVectors.jl/actions/workflows/Test.yml/badge.svg?branch=main)](https://github.com/JuliaHEP/FourVectors.jl/actions/workflows/Test.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/JuliaHEP/FourVectors.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaHEP/FourVectors.jl)
+[![Docs](https://img.shields.io/badge/docs-blue.svg)](https://juliahep.github.io/FourVectors.jl/dev/)
 
 FourVectors.jl is a small package for Cartesian four-momenta in high-energy physics.
 The central type is `FourVector`, an immutable `FieldVector{4}` from StaticArrays with named components `px`, `py`, `pz`, and `E`.
@@ -27,14 +27,14 @@ The package is not registered yet.
 Install from GitHub:
 
 ```julia
-julia> ] add https://github.com/mmikhasenko/FourVectors.jl
+julia> ] add https://github.com/JuliaHEP/FourVectors.jl
 ```
 
 ## Documentation
 
-Full API reference and a worked example (neutral pion decay) are on the [Documenter site](https://mmikhasenko.github.io/FourVectors.jl/dev/).
+Full API reference and tutorials are on the [Documenter site](https://juliahep.github.io/FourVectors.jl/dev/).
 
-The tutorial is written as plain Julia in `literate/tutorials/pi0_decay.jl` and woven into the manual with Literate.jl when the docs build runs `docs/make.jl`.
+Tutorials are plain Julia scripts in `literate/tutorials/` and woven into the manual with Literate.jl when the docs build runs `docs/make.jl`.
 
 ## Usage
 

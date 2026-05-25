@@ -31,7 +31,8 @@ LorentzVectorBase.py(mom::FourVector) = getfield(mom, :py)
 LorentzVectorBase.pz(mom::FourVector) = getfield(mom, :pz)
 LorentzVectorBase.E(mom::FourVector) = getfield(mom, :E)
 
-LinearAlgebra.dot(p1::FourVector, p2::FourVector) = p1.E * p2.E - dot(p1.P, p2.P)
+LinearAlgebra.dot(p1::FourVector, p2::FourVector) =
+    p1.E * p2.E - (p1.px * p2.px + p1.py * p2.py + p1.pz * p2.pz)
 
 """
     spherical_coordinates(p)
