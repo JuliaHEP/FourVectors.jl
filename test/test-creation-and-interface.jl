@@ -1,4 +1,5 @@
 using FourVectors
+using LinearAlgebra
 using Test
 
 p = FourVector(1.0, 2.0, 3.0; E = 4.0)
@@ -38,4 +39,5 @@ end
     @test Ω.cosθ ≈ cos_theta(p)
     @test Ω.ϕ ≈ azimuthal_angle(p)
     @test propertynames(Ω) === (:cosθ, :ϕ)
+    @test dot(p, p) ≈ mass2(p)
 end

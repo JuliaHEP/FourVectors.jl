@@ -2,8 +2,10 @@
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 FourVectors = "b122eb78-8380-428a-b8c8-584a022ae8b6"
 Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+LorentzVectorBase = "592a752d-6533-4762-a71b-738712ea30ec"
 
 [compat]
 Documenter = "1"
 Literate = "2"
+LorentzVectorBase = "0.1"
 julia = "1.7"

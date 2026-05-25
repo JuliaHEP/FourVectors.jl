@@ -32,9 +32,9 @@ julia> ] add https://github.com/mmikhasenko/FourVectors.jl
 
 ## Documentation
 
-Full API reference and a worked example (neutral pion decay) are on the [Documenter site](https://mmikhasenko.github.io/FourVectors.jl/dev/).
+Full API reference and tutorials are on the [Documenter site](https://mmikhasenko.github.io/FourVectors.jl/dev/).
 
-The tutorial is written as plain Julia in `literate/tutorials/pi0_decay.jl` and woven into the manual with Literate.jl when the docs build runs `docs/make.jl`.
+Tutorials are plain Julia scripts in `literate/tutorials/` and woven into the manual with Literate.jl when the docs build runs `docs/make.jl`.
 
 ## Usage
 
