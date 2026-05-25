@@ -1,3 +1,9 @@
+"""
+    FourVectorCyl{T}
+
+Cylindrical four-momentum stored as `(pt, η, φ, mass)` in a [`FieldVector{4}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector).
+Implements the `LorentzVectorBase.PtEtaPhiM()` coordinate system.
+"""
 struct FourVectorCyl{T} <: FieldVector{4, T}
     pt::T
     eta::T
