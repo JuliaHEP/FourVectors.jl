@@ -3,14 +3,14 @@
 [![Test workflow status](https://github.com/mmikhasenko/FourVectors.jl/actions/workflows/Test.yml/badge.svg?branch=main)](https://github.com/mmikhasenko/FourVectors.jl/actions/workflows/Test.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/mmikhasenko/FourVectors.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mmikhasenko/FourVectors.jl)
 
-The `FourVector` is Julia package for handling four-vectors based on the immutable StaticArray `FieldArray{T,4}`.
-It provides a simple and efficient implementation of an immutable four-vector object, utilizing the `LorentzVectorBase.jl` interface.
-Inherits from `FieldArray{T,4}` implies that the `FourVector` is a subtype of `AbstractArray`, can be indexed, and iterated.
+FourVectors.jl provides an immutable [`FieldVector{4,T}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector) type `FourVector` (components `px`, `py`, `pz`, `E` in Cartesian coordinates).
+
+It plugs into **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** for kinematic accessors. Subtyping `FieldVector` yields `AbstractVector`/`AbstractArray` behavior: indexing (`p[1:3]`), iteration, broadcasting, etc.
 
 ## Installation
 
 The package is not registered yet.
-Install the package using Julia's package manager:
+Install it with:
 
 ```julia
 julia> ] add https://github.com/mmikhasenko/FourVectors.jl
@@ -18,24 +18,20 @@ julia> ] add https://github.com/mmikhasenko/FourVectors.jl
 
 ## Usage
 
-First, import the package:
-
 ```julia
 using FourVectors
 ```
 
-### Creating FourVectors
+### Creating `FourVector`s
 
-You can create a `FourVector` by specifying the spatial components and either the energy `E` or the mass `M`.
+Specify three-momentum `(px, py, pz)` and **exactly one** of energy `E` or mass `M` (invariant):
 
 ```julia
 p = FourVector(1.0, 2.0, 3.0; E = 4.0)
 p = FourVector(1.0, 2.0, 3.0; M = sqrt(2))
 ```
 
-### Properties
-
-You can access the components directly:
+### Components
 
 ```julia
 px = p.px
@@ -44,7 +40,7 @@ pz = p.pz
 E  = p.E
 ```
 
-Or using aliases and indexing:
+Indexing:
 
 ```julia
 px = p[1]
@@ -52,48 +48,58 @@ py = p[2]
 pz = p[3]
 E  = p[4]
 
-momentum = p[1:3]  # Returns an array of [px, py, pz]
+momentum = p[1:3]  # e.g. [px, py, pz]
 ```
 
-### Kinematic Quantities
+### Exported kinematic accessors (LorentzVectorBase)
 
-Compute various kinematic quantities using provided `LorentzVectorBase` functions and aliases:
+Issue [#14](https://github.com/mmikhasenko/FourVectors.jl/issues/14): this package explicitly **re-exports** the following accessors from LorentzVectorBase (same names after `using FourVectors`):
+
+| Exported name |
+| --- |
+| `transverse_momentum`, `spatial_magnitude`, `mass`, `mass2` |
+| `boost_beta`, `boost_gamma`, `rapidity`, `polar_angle` |
+| `cos_theta`, `cos_phi`, `sin_phi`, `azimuthal_angle`, `pseudorapidity` |
+
+Example:
 
 ```julia
-m    = mass(p)               # Invariant mass
-pt   = pt(p)                 # Transverse momentum
-eta  = eta(p)                # Pseudorapidity
-phi  = azimuthal_angle(p)    # Azimuthal angle φ
-theta = polar_angle(p)       # Polar angle θ
+m      = mass(p)
+pt     = transverse_momentum(p)
+eta_pr = pseudorapidity(p)
+phi    = azimuthal_angle(p)
+θ      = polar_angle(p)
 ```
 
-### Lorentz Transformations
+LorentzVectorBase defines shorter **aliases** (not exported here) — for instance `transverse_momentum(p) ≡ LorentzVectorBase.pt(p)`, `azimuthal_angle(p) ≡ LorentzVectorBase.phi(p)`, and `pseudorapidity(p) ≡ LorentzVectorBase.eta(p)`.
+See LorentzVectorBase’s [*What You Get Automatically*](https://github.com/JuliaHEP/LorentzVectorBase.jl/blob/main/docs/src/10-interface.md) for Cartesian components (`px`, …, spatial `x`/`y`/`z` when applicable), invariant and transverse masses, aliases like `energy` / `invariant_mass`, and light-cone coordinates (`plus_component`, `minus_component`).
+Call any non-exported method as `LorentzVectorBase.name(p)`, or extend this package using the same `@eval import … export …` pattern used in [`src/FourVectors.jl`](src/FourVectors.jl).
 
-#### Rotations and Boosts
+This package additionally exports **`spherical_coordinates`** (returns `(cosθ, ϕ)` for the spatial direction).
 
-Rotate a four-vector around the x, y, or z-axis with active rotations:
+### Lorentz transformations
+
+**Exported:** `Rx`, `Ry`, `Rz`, `Bz`, `transform_to_cmf`, `rotate_to_plane`.
+
+Rotations (`Rx`, `Ry`, `Rz`) are active: angle `α` / `θ` / `ϕ` about lab **x**, **y**, **z**.
 
 ```julia
-# Rotation around x-axis by angle α
-p_rotated_x = Rx(p, α)
-
-# Rotation around y-axis by angle θ
-p_rotated_y = Ry(p, θ)
-
-# Rotation around z-axis by angle ϕ
-p_rotated_z = Rz(p, ϕ)
+p_rx = Rx(p, α)
+p_ry = Ry(p, θ)
+p_rz = Rz(p, ϕ)
 ```
 
-Perform a boost along the z-axis with Lorentz factor γ:
+Boost along lab **z** with Lorentz factor `γ` (flip sign for the opposite longitudinal direction):
 
 ```julia
-p_boosted = Bz(p, γ)
+p_bz = Bz(p, γ)
 ```
-A boost in the opposite direction can be achieved by passing a negative Lorentz factor.
+
+Partial application for pipelines (`p |> Rx(ϕ)`, etc.) is supported.
 
 ## Contributing
 
-Contributions are welcome! If you find a bug or have a feature request, please open an issue on the GitHub repository.
+Contributions are welcome! Issues and PRs belong on GitHub.
 
 ## License
 

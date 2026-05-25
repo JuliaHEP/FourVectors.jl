@@ -8,8 +8,8 @@ p′ = FourVector(1.0, 2.0, 3.0; M = √2)
 @testset "Construction" begin
     @test p isa FourVector
     @test p ≈ p′
-    @test_throws AssertionError FourVector(1, 2, 3)
-    @test_throws AssertionError FourVector(1.0, 2.0, 3.0; E = 3.3, M = 4.0)
+    @test_throws ArgumentError FourVector(1, 2, 3)
+    @test_throws ArgumentError FourVector(1.0, 2.0, 3.0; E = 3.3, M = 4.0)
 end
 
 @testset "Properties via LorentzVectorBase interface" begin
