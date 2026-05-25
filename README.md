@@ -125,6 +125,15 @@ p_bz = Bz(p, γ)
 
 Partial application for pipelines (`p |> Rx(ϕ)`, etc.) is supported.
 
+## Related packages
+
+FourVectors.jl builds on the shared interface in **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** and provides concrete `FieldVector` types with Lorentz transforms and collider utilities.
+
+Other Lorentz-vector packages in the Julia ecosystem:
+
+- **[LorentzVectorHEP.jl](https://github.com/JuliaHEP/LorentzVectorHEP.jl)** — Cartesian `(t, x, y, z)` and cylindrical `(pt, η, φ, M)` types for collider-style kinematics (`ΔR`, `fast_mass`, …). `FourVectorCyl` covers much of the same cylindrical workflow; see [JuliaHEP/LorentzVectorBase.jl#43](https://github.com/JuliaHEP/LorentzVectorBase.jl/issues/43) for planned shared separation utilities upstream.
+- **[LorentzVectors.jl](https://github.com/JLTastet/LorentzVectors.jl)** — general-purpose `LorentzVector` / `MinkowskiVector` types and operations in special relativity.
+
 ## Contributing
 
 Contributions are welcome! Issues and PRs belong on GitHub.
