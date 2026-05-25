@@ -40,7 +40,7 @@ makedocs(;
     linkcheck = true,
     linkcheck_ignore = [
         # GitHub blob URLs rate-limit anonymous curl requests during linkcheck.
-        r"^https://github.com/mmikhasenko/FourVectors.jl/blob/",
+        r"^https://github.com/JuliaHEP/FourVectors.jl/blob/",
     ],
     pages = [
         "Home" => "index.md",
@@ -50,7 +50,7 @@ makedocs(;
 )
 
 deploydocs(;
-    repo = "github.com/mmikhasenko/FourVectors.jl.git",
+    repo = "github.com/JuliaHEP/FourVectors.jl.git",
     devbranch = "main",
     versions = ["dev" => "dev"],
 )
