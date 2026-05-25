@@ -28,6 +28,11 @@ makedocs(;
     authors = "Misha Mikhasenko and contributors.",
     format = Documenter.HTML(; prettyurls = get(ENV, "CI", "false") == "true"),
     modules = [FourVectors],
+    linkcheck = true,
+    linkcheck_ignore = [
+        # GitHub blob URLs rate-limit anonymous curl requests during linkcheck.
+        r"^https://github.com/mmikhasenko/FourVectors.jl/blob/",
+    ],
     pages = [
         "Home" => "index.md",
         "Tutorials" =>
