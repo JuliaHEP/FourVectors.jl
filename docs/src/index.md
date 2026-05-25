@@ -1,8 +1,14 @@
 # FourVectors.jl
 
-[FourVectors](https://github.com/mmikhasenko/FourVectors.jl) wraps an immutable Cartesian four-momentum (**`FourVector`** as **`FieldVector{4}`**) and implements the **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** interface.
+[FourVectors](https://github.com/mmikhasenko/FourVectors.jl) provides immutable **concrete** four-momentum types — **`FourVector`** (Cartesian) and **`FourVectorCyl`** (cylindrical) — as **`FieldVector{4}`** implementations of the **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** interface.
 
-Installation, exported kinematic accessors, and usage examples appear in the README on GitHub (`README.md`).
+Load both packages in typical use:
+
+```julia
+using FourVectors, LorentzVectorBase
+```
+
+Installation, usage, and Lorentz transforms appear in the README on GitHub (`README.md`).
 
 ## Guides
 

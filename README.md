@@ -4,12 +4,12 @@
 [![Coverage](https://codecov.io/gh/mmikhasenko/FourVectors.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mmikhasenko/FourVectors.jl)
 [![Docs](https://img.shields.io/badge/docs-blue.svg)](https://mmikhasenko.github.io/FourVectors.jl/dev/)
 
-FourVectors.jl provides immutable [`FieldVector{4,T}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector) types for four-momenta:
+FourVectors.jl provides immutable [`FieldVector{4,T}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector) **concrete types** for four-momenta:
 
 - **`FourVector`** — Cartesian `(px, py, pz, E)`
 - **`FourVectorCyl`** — cylindrical `(pt, η, φ, M)` as used at colliders
 
-Both plug into **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** for kinematic accessors. Subtyping `FieldVector` yields `AbstractVector`/`AbstractArray` behavior: indexing, iteration, broadcasting, etc.
+Kinematic accessors (`mass`, `pt`, `η`, `ΔR`, …), coordinate conversions, and the shared interface live in **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)**. Subtyping `FieldVector` yields `AbstractVector`/`AbstractArray` behavior: indexing, iteration, broadcasting, etc.
 
 ## Installation
 
@@ -20,6 +20,12 @@ Install it with:
 julia> ] add https://github.com/mmikhasenko/FourVectors.jl
 ```
 
+You will typically load both packages:
+
+```julia
+using FourVectors, LorentzVectorBase
+```
+
 ## Documentation
 
 **[Documentation](https://mmikhasenko.github.io/FourVectors.jl/dev/)** (`main` → `gh-pages` `/dev/`): navigable API reference (`@autodocs`) and **[π⁰ → γ γ tutorial](https://mmikhasenko.github.io/FourVectors.jl/dev/tutorials/pi0_decay/)**.
@@ -27,10 +33,6 @@ julia> ] add https://github.com/mmikhasenko/FourVectors.jl
 The tutorial source is plain Julia at [`literate/tutorials/pi0_decay.jl`](https://github.com/mmikhasenko/FourVectors.jl/blob/main/literate/tutorials/pi0_decay.jl); [Literate.jl](https://github.com/fredrikekre/Literate.jl) turns it into a documentation page and runs the embedded code when the docs build executes **`docs/make.jl`** (see **`.github/workflows/Documentation.yml`** in this repository).
 
 ## Usage
-
-```julia
-using FourVectors
-```
 
 ### Creating `FourVector`s
 
@@ -42,6 +44,8 @@ p = FourVector(1.0, 2.0, 3.0; M = sqrt(2))
 ```
 
 ### Components
+
+Field access on the concrete types:
 
 ```julia
 px = p.px
@@ -61,30 +65,22 @@ E  = p[4]
 momentum = p[1:3]  # e.g. [px, py, pz]
 ```
 
-### Exported kinematic accessors (LorentzVectorBase)
+### Kinematic accessors (LorentzVectorBase)
 
-Issue [#14](https://github.com/mmikhasenko/FourVectors.jl/issues/14): this package explicitly **re-exports** the following accessors from LorentzVectorBase (same names after `using FourVectors`):
-
-| Exported name |
-| --- |
-| `transverse_momentum`, `spatial_magnitude`, `mass`, `mass2` |
-| `boost_beta`, `boost_gamma`, `rapidity`, `polar_angle` |
-| `cos_theta`, `cos_phi`, `sin_phi`, `azimuthal_angle`, `pseudorapidity` |
-| `transverse_mass`, `transverse_mass2`, `pt`, `pt2`, `eta`, `phi`, `mt`, `mt2` |
-
-Example:
+Derived quantities are provided by **LorentzVectorBase** for any compliant type, including `FourVector` and `FourVectorCyl`:
 
 ```julia
+using FourVectors, LorentzVectorBase
+
 m      = mass(p)
-pt     = transverse_momentum(p)
-eta_pr = pseudorapidity(p)
-phi    = azimuthal_angle(p)
+pt     = transverse_momentum(p)   # alias: pt(p)
+eta_pr = pseudorapidity(p)          # alias: eta(p)
+phi    = azimuthal_angle(p)         # alias: phi(p)
 θ      = polar_angle(p)
+ΔR     = deltar(p, q)
 ```
 
-LorentzVectorBase defines shorter **aliases** (not exported here) — for instance `transverse_momentum(p) ≡ LorentzVectorBase.pt(p)`, `azimuthal_angle(p) ≡ LorentzVectorBase.phi(p)`, and `pseudorapidity(p) ≡ LorentzVectorBase.eta(p)`.
-See LorentzVectorBase’s [*What You Get Automatically*](https://github.com/JuliaHEP/LorentzVectorBase.jl/blob/main/docs/src/10-interface.md) for Cartesian components (`px`, …, spatial `x`/`y`/`z` when applicable), invariant and transverse masses, aliases like `energy` / `invariant_mass`, and light-cone coordinates (`plus_component`, `minus_component`).
-Call any non-exported method as `LorentzVectorBase.name(p)`, or extend this package using the same `@eval import … export …` pattern used in [`src/FourVectors.jl`](src/FourVectors.jl).
+See LorentzVectorBase’s [*What You Get Automatically*](https://github.com/JuliaHEP/LorentzVectorBase.jl/blob/main/docs/src/10-interface.md) for the full accessor list (`mt`, light-cone components, …).
 
 This package additionally exports **`spherical_coordinates`** (returns `(cosθ, ϕ)` for the spatial direction).
 
@@ -98,11 +94,17 @@ p = FourVector(v)   # convert to Cartesian
 c = FourVectorCyl(p)
 ```
 
-Construct from `(pt, η, φ, E)` via **`fromPtEtaPhiE`**. Sum four-momenta in cylindrical space with **`+`** (recomputes kinematics). Pairwise **`fast_mass`**, **`deltar`**, **`deltaphi`**, **`deltaeta`** (aliases **`ΔR`**, **`Δϕ`**, **`Δη`**) work on both `FourVector` and `FourVectorCyl`.
+FourVectors-specific cylindrical utilities:
+
+- **`fromPtEtaPhiE`** — build from `(pt, η, φ, E)`
+- **`+`** on `FourVectorCyl` — sum four-momenta and recompute kinematics
+- **`fast_mass`** — optimized di-mass for two cylindrical vectors
+
+Pairwise separation **`deltar`**, **`deltaphi`**, **`deltaeta`** (aliases **`ΔR`**, **`Δϕ`**, **`Δη`**) is exported from **LorentzVectorBase** and works on both types.
 
 ### Lorentz transformations
 
-**Exported:** `Rx`, `Ry`, `Rz`, `Bz`, `transform_to_cmf`, `rotate_to_plane`.
+**Exported from FourVectors:** `Rx`, `Ry`, `Rz`, `Bz`, `transform_to_cmf`, `rotate_to_plane`.
 
 Rotations (`Rx`, `Ry`, `Rz`) are active: angle `α` / `θ` / `ϕ` about lab **x**, **y**, **z**.
 
@@ -119,6 +121,7 @@ p_bz = Bz(p, γ)
 ```
 
 Partial application for pipelines (`p |> Rx(ϕ)`, etc.) is supported.
+Apply transforms to cylindrical vectors via Cartesian conversion, e.g. `Bz(FourVector(v), γ)`.
 
 ## Contributing
 
