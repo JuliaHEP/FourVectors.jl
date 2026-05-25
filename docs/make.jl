@@ -39,4 +39,5 @@ makedocs(;
 deploydocs(;
     repo = "github.com/mmikhasenko/FourVectors.jl.git",
     devbranch = "main",
+    versions = ["dev" => "dev"],
 )

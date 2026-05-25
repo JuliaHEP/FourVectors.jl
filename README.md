@@ -2,7 +2,7 @@
 
 [![Test workflow status](https://github.com/mmikhasenko/FourVectors.jl/actions/workflows/Test.yml/badge.svg?branch=main)](https://github.com/mmikhasenko/FourVectors.jl/actions/workflows/Test.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/mmikhasenko/FourVectors.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mmikhasenko/FourVectors.jl)
-[![Dev docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://mmikhasenko.github.io/FourVectors.jl/dev/)
+[![Docs](https://img.shields.io/badge/docs-blue.svg)](https://mmikhasenko.github.io/FourVectors.jl/dev/)
 
 FourVectors.jl provides an immutable [`FieldVector{4,T}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector) type `FourVector` (components `px`, `py`, `pz`, `E` in Cartesian coordinates).
 
@@ -19,11 +19,9 @@ julia> ] add https://github.com/mmikhasenko/FourVectors.jl
 
 ## Documentation
 
-**[Documentation (dev)](https://mmikhasenko.github.io/FourVectors.jl/dev/)** (`main`): navigable API reference (`@autodocs`) and **[π⁰ → γ γ tutorial](https://mmikhasenko.github.io/FourVectors.jl/dev/tutorials/pi0_decay/)**.
+**[Documentation](https://mmikhasenko.github.io/FourVectors.jl/dev/)** (`main` → `gh-pages` `/dev/`): navigable API reference (`@autodocs`) and **[π⁰ → γ γ tutorial](https://mmikhasenko.github.io/FourVectors.jl/dev/tutorials/pi0_decay/)**.
 
 The tutorial source is plain Julia at [`literate/tutorials/pi0_decay.jl`](https://github.com/mmikhasenko/FourVectors.jl/blob/main/literate/tutorials/pi0_decay.jl); [Literate.jl](https://github.com/fredrikekre/Literate.jl) turns it into a documentation page and runs the embedded code when the docs build executes **`docs/make.jl`** (see **`.github/workflows/Documentation.yml`** in this repository).
-
-After the first **`gh-pages`** deploy, **stable** docs follow tagged releases ([stable](https://mmikhasenko.github.io/FourVectors.jl/stable/)).
 
 ## Usage
 
