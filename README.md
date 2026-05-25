@@ -4,9 +4,12 @@
 [![Coverage](https://codecov.io/gh/mmikhasenko/FourVectors.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mmikhasenko/FourVectors.jl)
 [![Docs](https://img.shields.io/badge/docs-blue.svg)](https://mmikhasenko.github.io/FourVectors.jl/dev/)
 
-FourVectors.jl provides an immutable [`FieldVector{4,T}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector) type `FourVector` (components `px`, `py`, `pz`, `E` in Cartesian coordinates).
+FourVectors.jl provides immutable [`FieldVector{4,T}`](https://juliaarrays.github.io/StaticArrays.jl/stable/pages/api/#StaticArrays.FieldVector) types for four-momenta:
 
-It plugs into **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** for kinematic accessors. Subtyping `FieldVector` yields `AbstractVector`/`AbstractArray` behavior: indexing (`p[1:3]`), iteration, broadcasting, etc.
+- **`FourVector`** — Cartesian `(px, py, pz, E)`
+- **`FourVectorCyl`** — cylindrical `(pt, η, φ, M)` as used at colliders
+
+Both plug into **[LorentzVectorBase.jl](https://github.com/JuliaHEP/LorentzVectorBase.jl)** for kinematic accessors. Subtyping `FieldVector` yields `AbstractVector`/`AbstractArray` behavior: indexing, iteration, broadcasting, etc.
 
 ## Installation
 
@@ -67,6 +70,7 @@ Issue [#14](https://github.com/mmikhasenko/FourVectors.jl/issues/14): this packa
 | `transverse_momentum`, `spatial_magnitude`, `mass`, `mass2` |
 | `boost_beta`, `boost_gamma`, `rapidity`, `polar_angle` |
 | `cos_theta`, `cos_phi`, `sin_phi`, `azimuthal_angle`, `pseudorapidity` |
+| `transverse_mass`, `transverse_mass2`, `pt`, `pt2`, `eta`, `phi`, `mt`, `mt2` |
 
 Example:
 
@@ -83,6 +87,18 @@ See LorentzVectorBase’s [*What You Get Automatically*](https://github.com/Juli
 Call any non-exported method as `LorentzVectorBase.name(p)`, or extend this package using the same `@eval import … export …` pattern used in [`src/FourVectors.jl`](src/FourVectors.jl).
 
 This package additionally exports **`spherical_coordinates`** (returns `(cosθ, ϕ)` for the spatial direction).
+
+### Cylindrical `FourVectorCyl`
+
+Native collider coordinates `(pt, η, φ, M)`:
+
+```julia
+v = FourVectorCyl(43.7, 1.47, 1.69, 0.106)
+p = FourVector(v)   # convert to Cartesian
+c = FourVectorCyl(p)
+```
+
+Construct from `(pt, η, φ, E)` via **`fromPtEtaPhiE`**. Sum four-momenta in cylindrical space with **`+`** (recomputes kinematics). Pairwise **`fast_mass`**, **`deltar`**, **`deltaphi`**, **`deltaeta`** (aliases **`ΔR`**, **`Δϕ`**, **`Δη`**) work on both `FourVector` and `FourVectorCyl`.
 
 ### Lorentz transformations
 
