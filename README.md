@@ -21,9 +21,6 @@ Two that are often used in HEP workflows are:
 - [LorentzVectors.jl](https://github.com/JLTastet/LorentzVectors.jl) — lightweight, registered package with `LorentzVector` / `Vec4` and `SpatialVector` / `Vec3`, Minkowski inner products, boosts, and related algebra.
 - [LorentzVectorHEP.jl](https://github.com/JuliaHEP/LorentzVectorHEP.jl) — HEP-oriented layer built on LorentzVectors.jl, adding cylindrical coordinates (`LorentzVectorCyl`) and common analysis helpers (`ΔR`, `mt`, and similar).
 
-FourVectors.jl takes a different angle: one Cartesian type backed by StaticArrays, full vector indexing (including `p[1:3]`), and explicit compatibility with the LorentzVectorBase interface so accessors and conventions stay aligned across packages in that ecosystem.
-Pick LorentzVectors or LorentzVectorHEP if you want their types and built-in cylindrical representation; pick FourVectors if you want `FieldVector` semantics and LorentzVectorBase integration.
-
 ## Installation
 
 The package is not registered yet.
