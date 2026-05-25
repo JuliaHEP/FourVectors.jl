@@ -7,7 +7,6 @@ on:
     paths:
       - "src/**"
       - "test/**"
-      - "literate/**"
       - "*.toml"
     types: [opened, synchronize, reopened]
 

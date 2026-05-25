@@ -70,7 +70,7 @@ version = "1.11.0"
 
 [[deps.FourVectors]]
 deps = ["LinearAlgebra", "LorentzVectorBase", "StaticArrays"]
-path = ".."
+path = "/Users/mikhailmikhasenko/Documents/JuliaDev.CAT/FourVectors.jl"
 uuid = "b122eb78-8380-428a-b8c8-584a022ae8b6"
 version = "0.3.4"
 

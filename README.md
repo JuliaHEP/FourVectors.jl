@@ -21,7 +21,7 @@ julia> ] add https://github.com/mmikhasenko/FourVectors.jl
 
 **[Documentation (dev)](https://mmikhasenko.github.io/FourVectors.jl/dev/)** (`main`): navigable API reference (`@autodocs`) and **[π⁰ → γ γ tutorial](https://mmikhasenko.github.io/FourVectors.jl/dev/tutorials/pi0_decay/)**.
 
-The tutorial source is plain Julia at [`literate/tutorials/pi0_decay.jl`](https://github.com/mmikhasenko/FourVectors.jl/blob/main/literate/tutorials/pi0_decay.jl); [Literate.jl](https://github.com/fredrikekre/Literate.jl) turns it into a documentation page **and** the test suite `include`s the same script so physics checks stay synced.
+The tutorial source is plain Julia at [`literate/tutorials/pi0_decay.jl`](https://github.com/mmikhasenko/FourVectors.jl/blob/main/literate/tutorials/pi0_decay.jl); [Literate.jl](https://github.com/fredrikekre/Literate.jl) turns it into a documentation page and runs the embedded code when the docs build executes **`docs/make.jl`** (see **`.github/workflows/Documentation.yml`** in this repository).
 
 After the first **`gh-pages`** deploy, **stable** docs follow tagged releases ([stable](https://mmikhasenko.github.io/FourVectors.jl/stable/)).
 

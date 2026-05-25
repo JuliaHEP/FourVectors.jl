@@ -9,4 +9,4 @@ Installation, exported kinematic accessors, and usage examples appear in the REA
 See [Neutral pion decay](tutorials/pi0_decay.md).
 
 Source Julia script: [`literate/tutorials/pi0_decay.jl`](https://github.com/mmikhasenko/FourVectors.jl/blob/main/literate/tutorials/pi0_decay.jl).
-It is bundled into this manual with **[Literate.jl](https://github.com/fredrikekre/Literate.jl)** (`docs/make.jl`) and exercised by **`Pkg.test()`** via `include`.
+It is bundled into this manual with **[Literate.jl](https://github.com/fredrikekre/Literate.jl)** and its code chunks are executed during **`docs/make.jl`** when the manual is built.
